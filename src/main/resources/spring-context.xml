@@ -4,11 +4,17 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-     <bean id="personDao" class="ru.otus.tasks.task1.dao.PersonDaoGet">
+     <bean id="personDao" class="ru.otus.tasks.task1.dao.PersonDaoImpl">
+     </bean>
+
+    <bean id="questionDao" class="ru.otus.tasks.task1.dao.QuestionDaoImpl">
+        <constructor-arg name="ask" value=""/>
+        <constructor-arg name="answer" value=""/>
     </bean>
 
    <bean id="personService" class="ru.otus.tasks.task1.service.PersonServiceImpl">
-      <constructor-arg name="dao" ref="personDao"/>
+      <constructor-arg name="daoPerson" ref="personDao"/>
+       <constructor-arg name="daoQuestion" ref="questionDao"/>
        <constructor-arg name="path" value="questions.csv"/>
    </bean>
 
