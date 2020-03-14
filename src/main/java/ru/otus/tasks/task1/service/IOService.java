@@ -4,4 +4,6 @@ public interface IOService {
     String askStr(String question);
     int askInt(String question);
     void print(String str);
+    void close();
+
 }

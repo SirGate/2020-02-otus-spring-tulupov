@@ -3,21 +3,32 @@ package ru.otus.tasks.task1;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.otus.tasks.task1.domain.Person;
+import ru.otus.tasks.task1.domain.Question;
+import ru.otus.tasks.task1.service.CheckingServiceImpl;
 import ru.otus.tasks.task1.service.IOService;
-import ru.otus.tasks.task1.service.PersonServiceImpl;
+import ru.otus.tasks.task1.service.RunnerImpl;
+
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class PersonServiceImplTest {
+public class CheckingServiceImplTest {
 
     @Test
     public void whenCheckPerson() {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
-        PersonServiceImpl service = context.getBean(PersonServiceImpl.class);
         StubIOService input = new StubIOService(new String[] {"11", "21", "31", "34", "40"});
+        List<Question> adapter = List.of(
+                new Question("", "11"),
+                new Question("", "21"),
+                new Question("", "31"),
+                new Question("", "34"),
+                new Question("", "40")
+        );
         Person person = new Person("Petrov", "Ivan");
-        int check = service.getChecked(person, input);
+        CheckingServiceImpl checkingService = context.getBean(CheckingServiceImpl.class);
+        int check = checkingService.check(adapter, input);
         String result = person.getFamilyName() + " "  + person.getName() + " " + check;
         assertThat(result, is("Petrov Ivan 5"));
         context.close();
@@ -43,6 +54,10 @@ public class PersonServiceImplTest {
 
         @Override public void print(String message) {
         }
-    }
 
+        @Override
+        public void close() {
+
+        }
+    }
 }

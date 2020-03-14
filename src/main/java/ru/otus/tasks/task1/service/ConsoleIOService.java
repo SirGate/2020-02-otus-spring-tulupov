@@ -11,10 +11,13 @@ public class ConsoleIOService implements IOService {
     private InputStream input;
     private PrintStream output;
 
-    public ConsoleIOService(InputStream input, PrintStream output) {
-        this.input = input;
-        this.output = output;
+    public void setInput(InputStream input) {
         scanner = new Scanner(input);
+        this.input = input;
+    }
+
+    public void setOutput(PrintStream output) {
+        this.output = output;
     }
 
     @Override

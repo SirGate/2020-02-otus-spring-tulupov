@@ -1,21 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+<util:constant id="IN"
+        static-field="ru.otus.tasks.task1.service.RunnerImpl.IN"/>
+
+<util:constant id="OUT"
+                   static-field="ru.otus.tasks.task1.service.RunnerImpl.OUT"/>
+
 
      <bean id="personDao" class="ru.otus.tasks.task1.dao.PersonDaoImpl">
+         <constructor-arg name="ioService" ref="consoleIOService"/>
      </bean>
 
     <bean id="questionDao" class="ru.otus.tasks.task1.dao.QuestionDaoImpl">
-        <constructor-arg name="ask" value=""/>
-        <constructor-arg name="answer" value=""/>
+        <constructor-arg name="path" value="questions.csv"/>
     </bean>
 
-   <bean id="personService" class="ru.otus.tasks.task1.service.PersonServiceImpl">
-      <constructor-arg name="daoPerson" ref="personDao"/>
-       <constructor-arg name="daoQuestion" ref="questionDao"/>
-       <constructor-arg name="path" value="questions.csv"/>
-   </bean>
+    <bean id="checkinService" class="ru.otus.tasks.task1.service.CheckingServiceImpl">
+    </bean>
+
+    <bean id="consoleIOService" class="ru.otus.tasks.task1.service.ConsoleIOService">
+        <property name="input" ref="IN"/>
+        <property name="output" ref="OUT"/>
+    </bean>
+
+    <bean id="runner" class="ru.otus.tasks.task1.service.RunnerImpl">
+        <constructor-arg name="personDao" ref="personDao"/>
+        <constructor-arg name="questionDao" ref="questionDao"/>
+        <constructor-arg name="checkingService" ref="checkinService"/>
+        <constructor-arg name="consoleIOService" ref="consoleIOService"/>
+    </bean>
 
 </beans>

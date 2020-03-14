@@ -1,13 +1,13 @@
 package ru.otus.tasks.task1.dao;
 
 import ru.otus.tasks.task1.domain.Person;
-import ru.otus.tasks.task1.service.ConsoleIOService;
+import ru.otus.tasks.task1.service.IOService;
 
 public class PersonDaoImpl implements PersonDao {
 
-   private ConsoleIOService ioService;
+   private IOService ioService;
 
-    public void setIoService(ConsoleIOService ioService) {
+    public PersonDaoImpl(IOService ioService) {
         this.ioService = ioService;
     }
 

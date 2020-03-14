@@ -1,21 +1,32 @@
 package ru.otus.tasks.task1.service;
 
+import ru.otus.tasks.task1.dao.PersonDao;
+import ru.otus.tasks.task1.dao.QuestionDao;
 import ru.otus.tasks.task1.domain.Person;
+import ru.otus.tasks.task1.domain.Question;
+
+import java.util.List;
 
 public class RunnerImpl implements Runner {
-    private final PersonServiceImpl service;
+    private final PersonDao personDao;
+    private final QuestionDao questionDao;
+    private final CheckingService checkingService;
+    private final IOService consoleIOService;
 
-    public RunnerImpl(PersonServiceImpl service) {
-        this.service = service;
+    public RunnerImpl(PersonDao personDao, QuestionDao questionDao,
+                      CheckingService checkingService, IOService consoleIOService) {
+        this.personDao = personDao;
+        this.questionDao = questionDao;
+        this.checkingService = checkingService;
+        this.consoleIOService = consoleIOService;
     }
 
  public void startTesting() {
-     ConsoleIOService input = new ConsoleIOService(System.in, System.out);
-     service.setIoService(input);
-     Person person = service.getPerson();
-     int result = service.getChecked(person, input);
-     input.print("Student: " + person.getFamilyName() + " " + person.getName());
-     input.print("Ответил правильно на " + result + " из 5 вопросов" + System.lineSeparator());
-     input.close();
+     Person person = personDao.getNewPerson();
+     List<Question> questions = questionDao.getNewQuestions();
+     int result = checkingService.check(questions, consoleIOService);
+     consoleIOService.print("Student: " + person.getFamilyName() + " " + person.getName());
+     consoleIOService.print("Ответил правильно на " + result + " из 5 вопросов" + System.lineSeparator());
+     consoleIOService.close();
  }
 }
