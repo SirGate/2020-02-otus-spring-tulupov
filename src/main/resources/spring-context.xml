@@ -20,6 +20,7 @@
     </bean>
 
     <bean id="checkinService" class="ru.otus.tasks.task1.service.CheckingServiceImpl">
+        <constructor-arg name="ioService" ref="consoleIOService"/>
     </bean>
 
     <bean id="consoleIOService" class="ru.otus.tasks.task1.service.ConsoleIOService">

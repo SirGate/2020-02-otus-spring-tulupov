@@ -5,6 +5,7 @@ import ru.otus.tasks.task1.dao.QuestionDao;
 import ru.otus.tasks.task1.domain.Person;
 import ru.otus.tasks.task1.domain.Question;
 
+import java.io.IOException;
 import java.util.List;
 
 public class RunnerImpl implements Runner {
@@ -21,10 +22,15 @@ public class RunnerImpl implements Runner {
         this.consoleIOService = consoleIOService;
     }
 
- public void startTesting() {
+ public void startTesting() throws IOException {
      Person person = personDao.getNewPerson();
-     List<Question> questions = questionDao.getNewQuestions();
-     int result = checkingService.check(questions, consoleIOService);
+     List<Question> questions = null;
+     try {
+         questions = questionDao.getNewQuestions();
+     } catch (IOException e) {
+         throw new IOException();
+     }
+     int result = checkingService.check(questions);
      consoleIOService.print("Student: " + person.getFamilyName() + " " + person.getName());
      consoleIOService.print("Ответил правильно на " + result + " из 5 вопросов" + System.lineSeparator());
      consoleIOService.close();

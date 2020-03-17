@@ -6,7 +6,6 @@ import ru.otus.tasks.task1.domain.Person;
 import ru.otus.tasks.task1.domain.Question;
 import ru.otus.tasks.task1.service.CheckingServiceImpl;
 import ru.otus.tasks.task1.service.IOService;
-import ru.otus.tasks.task1.service.RunnerImpl;
 
 import java.util.List;
 
@@ -27,8 +26,8 @@ public class CheckingServiceImplTest {
                 new Question("", "40")
         );
         Person person = new Person("Petrov", "Ivan");
-        CheckingServiceImpl checkingService = context.getBean(CheckingServiceImpl.class);
-        int check = checkingService.check(adapter, input);
+        CheckingServiceImpl checkingService = new CheckingServiceImpl(input);
+        int check = checkingService.check(adapter);
         String result = person.getFamilyName() + " "  + person.getName() + " " + check;
         assertThat(result, is("Petrov Ivan 5"));
         context.close();

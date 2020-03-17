@@ -3,6 +3,7 @@ package ru.otus.tasks.task1.dao;
 import ru.otus.tasks.task1.domain.Question;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public List<Question> getNewQuestions() {
+    public List<Question> getNewQuestions() throws IOException {
          String issue;
          try {
              InputStream i = this.getClass().getClassLoader().getResourceAsStream(path);
@@ -30,7 +31,7 @@ public class QuestionDaoImpl implements QuestionDao {
              }
              i.close();
          } catch (Exception e) {
-             e.printStackTrace();
+             throw new IOException();
          }
          return questions;
   }
