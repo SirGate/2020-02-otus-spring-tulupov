@@ -1,5 +1,6 @@
 package ru.otus.tasks.task1.dao;
 
+import org.springframework.stereotype.Repository;
 import ru.otus.tasks.task1.domain.Question;
 
 import java.io.BufferedReader;
@@ -9,19 +10,25 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class QuestionDaoImpl implements QuestionDao {
-    private final String path;
+
+   private String path;
 
    private final List<Question> questions = new ArrayList<>();
 
-    public QuestionDaoImpl(String path) {
-        this.path = path;
-    }
+   public QuestionDaoImpl() {
+         }
+
+   public QuestionDaoImpl(String path) {
+       this.path = path;
+   }
+
 
     @Override
     public List<Question> getNewQuestions() throws IOException {
          String issue;
-         try {
+           try {
              InputStream i = this.getClass().getClassLoader().getResourceAsStream(path);
              BufferedReader fileInput = new BufferedReader(new InputStreamReader(i));
              while ((issue = fileInput.readLine()) != null) {
