@@ -1,91 +1,61 @@
 package ru.otus.tasks.task1.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import ru.otus.tasks.task1.dao.PersonDao;
 import ru.otus.tasks.task1.dao.QuestionDao;
 import ru.otus.tasks.task1.domain.Person;
 import ru.otus.tasks.task1.domain.Question;
+import ru.otus.tasks.task1.exc.QuestionsLoadException;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class RunnerImpl implements Runner {
 
     private final PersonDao personDao;
-    private final QuestionDao questionDaoEn;
-    private final QuestionDao questionDaoRu;
+    private final QuestionDao questionDao;
     private final CheckingService checkingService;
     private final IOService consoleIOService;
 
-    private MessageSource messageSource;
+    @Value("${sufficient.result}")
+    private int sufficientResult;
 
-    @Autowired
-    private int isPassed;
-
-    @Autowired
-    @Qualifier("messageSourceRu")
-    private MessageSource messageSourceRu;
-
-    @Autowired
-    @Qualifier("messageSourceEn")
-    private MessageSource messageSourceEn;
-
-
-
-    public RunnerImpl(PersonDao personDao, @Qualifier("questionsDaoEn") QuestionDao questionDaoEn,
-                      @Qualifier("questionsDaoRu") QuestionDao questionDaoRu,
-                       CheckingService checkingService, IOService consoleIOService) {
+    public RunnerImpl(PersonDao personDao, QuestionDao questionDao,
+                      CheckingService checkingService, IOService consoleIOService) {
         this.personDao = personDao;
-        this.questionDaoEn = questionDaoEn;
-        this.questionDaoRu = questionDaoRu;
+        this.questionDao = questionDao;
         this.checkingService = checkingService;
-        this.consoleIOService = consoleIOService;
+        this.consoleIOService  = consoleIOService;
     }
 
-    public void startTesting() throws IOException {
+    public void startTesting() {
 
      Person person = personDao.getNewPerson();
         List<Question> questions = null;
-        QuestionDao questionDao = null;
-        if (person.getLanguage() == 1) {
-            questionDao = questionDaoRu;
-            messageSource = messageSourceRu;
+            try {
+            questions = questionDao.getNewQuestions();
+        } catch (QuestionsLoadException e) {
+            e.printStackTrace();
         }
-        else if (person.getLanguage() == 2) {
-            questionDao = questionDaoEn;
-            messageSource = messageSourceEn;
-        }
+     int result = checkingService.check(questions);
+     consoleIOService.printString("" + System.lineSeparator());
+     consoleIOService.printMessage("answer.student");
+     consoleIOService.printString(person.getFamilyName() + " " + person.getName());
+     consoleIOService.printMessage("answer.result1");
+     consoleIOService.printString(String.valueOf(result));
+     consoleIOService.printMessage("answer.result2");
+     consoleIOService.printString(" " + System.lineSeparator());
 
-     try {
-         questions = questionDao.getNewQuestions();
-     } catch (IOException e) {
-         throw new IOException();
-     }
-     int result = checkingService.check(questions, person.getLanguage());
-     consoleIOService.print(messageSource.getMessage("answer.student",null, Locale.getDefault())
-             +
-             person.getFamilyName() + " " + person.getName());
-     consoleIOService.print(messageSource.getMessage("answer.result1",null, Locale.getDefault())
-             +
-             result
-             +
-             " "
-             +
-             messageSource.getMessage("answer.result2",null, Locale.getDefault())
-             +
-             System.lineSeparator());
-            String passed;
-       if (result < isPassed ) {
-           passed = messageSource.getMessage("answer.notpassed",null, Locale.getDefault());
+       if (result < sufficientResult) {
+           consoleIOService.printString(" " + System.lineSeparator());
+           consoleIOService.printMessage("answer.notpassed");
        } else {
-           passed = messageSource.getMessage("answer.passed",null, Locale.getDefault());
+           consoleIOService.printString(" " + System.lineSeparator());
+           consoleIOService.printMessage("answer.passed");
        }
-       consoleIOService.print(passed);
-       consoleIOService.close();
+        consoleIOService.close();
  }
 }

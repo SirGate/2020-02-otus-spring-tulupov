@@ -11,5 +11,5 @@ public class TestContextConfig {
 
 @Bean
 @Primary
-    IOService ioService() { return  Mockito.mock(IOService.class);  }
+    IOService ioService() { return  Mockito.mock(IOService.class); }
 }
