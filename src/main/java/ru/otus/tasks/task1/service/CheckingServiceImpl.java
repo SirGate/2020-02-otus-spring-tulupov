@@ -1,7 +1,5 @@
 package ru.otus.tasks.task1.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.otus.tasks.task1.domain.Question;
 
@@ -11,9 +9,6 @@ import java.util.List;
 public class CheckingServiceImpl implements CheckingService {
     private final IOService ioService;
 
-    @Autowired
-    private MessageSource messageSource;
-
     public CheckingServiceImpl(IOService ioService) {
         this.ioService = ioService;
     }
@@ -21,17 +16,17 @@ public class CheckingServiceImpl implements CheckingService {
     @Override
     public int check(List<Question> questionList) {
         int result = 0;
-            for (var question:questionList) {
-                ioService.printString("" + System.lineSeparator());
-                ioService.printString(question.getAsk());
-                int answer = this.ioService.askInt();
-                if (answer == Integer.valueOf(question.getAnswer())) {
-                    result++;
-                }
-                ioService.printString("" + System.lineSeparator());
-                ioService.printMessage("answer.right");
-                ioService.printString(question.getAnswer() + System.lineSeparator());
-       }
+        for (var question : questionList) {
+            ioService.printString("" + System.lineSeparator());
+            ioService.printString(question.getAsk());
+            int answer = this.ioService.askInt();
+            if (answer == Integer.valueOf(question.getAnswer())) {
+                result++;
+            }
+            ioService.printString("" + System.lineSeparator());
+            ioService.printMessage("answer.right");
+            ioService.printString(question.getAnswer() + System.lineSeparator());
+        }
         return result;
     }
 }

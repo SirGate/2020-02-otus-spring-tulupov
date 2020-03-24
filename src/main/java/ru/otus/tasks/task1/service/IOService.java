@@ -5,6 +5,5 @@ public interface IOService {
     int askInt();
     void printMessage(String str);
     void printString(String str);
-    public void setLocaleProps(String locale);
     void close();
 }

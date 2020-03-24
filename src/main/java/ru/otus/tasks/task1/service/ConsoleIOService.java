@@ -7,7 +7,6 @@ import ru.otus.tasks.task1.config.LocaleProps;
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Locale;
 import java.util.Scanner;
 
 @Service
@@ -16,12 +15,12 @@ public class ConsoleIOService implements IOService {
     private final Scanner in;
     private final PrintStream output;
     private final MessageSource messageSource;
-    private  LocaleProps localeProps;
+    private LocaleProps localeProps;
 
-public ConsoleIOService(@Value("#{T(System).in}") InputStream input,
-                        @Value("#{T(System).out}") PrintStream output,
-                        MessageSource messageSource,
-                        LocaleProps localeProps) {
+    public ConsoleIOService(@Value("#{T(System).in}") InputStream input,
+                            @Value("#{T(System).out}") PrintStream output,
+                            MessageSource messageSource,
+                            LocaleProps localeProps) {
         this.input = input;
         this.output = output;
         this.in = new Scanner(input);
@@ -29,13 +28,9 @@ public ConsoleIOService(@Value("#{T(System).in}") InputStream input,
         this.localeProps = localeProps;
     }
 
-    public void setLocaleProps(String locale) {
-        localeProps.setCurrentLocale(Locale.forLanguageTag(localeProps.getAvailableLanguages().get(locale)));
-    }
-
     @Override
     public String askStr() {
-         String answer = in.nextLine();
+        String answer = in.nextLine();
         return answer;
     }
 
@@ -46,7 +41,7 @@ public ConsoleIOService(@Value("#{T(System).in}") InputStream input,
 
     @Override
     public void printMessage(String key) {
-    output.print(messageSource.getMessage(key, null, localeProps.getCurrentLocale()) + " ");
+        output.print(messageSource.getMessage(key, null, localeProps.getCurrentLocale()) + " ");
     }
 
     @Override

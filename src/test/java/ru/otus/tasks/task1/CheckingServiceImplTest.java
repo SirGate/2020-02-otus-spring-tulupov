@@ -17,7 +17,6 @@ import ru.otus.tasks.task1.service.CheckingService;
 import ru.otus.tasks.task1.service.IOService;
 
 import java.util.List;
-import java.util.Locale;
 
 import static org.mockito.Mockito.*;
 
@@ -31,26 +30,26 @@ public class CheckingServiceImplTest {
     @Autowired
     private LocaleProps localeProps;
 
-   @Autowired
-   private IOService ioService;
+    @Autowired
+    private IOService ioService;
 
-   @Autowired
-   private CheckingService checkingService;
+    @Autowired
+    private CheckingService checkingService;
 
-   @Test
-   void shouldExecuteRussianLocalisation() {
-        localeProps.setCurrentLocale(Locale.forLanguageTag(localeProps.getAvailableLanguages().get("Russian")));
+    @Test
+    void shouldExecuteRussianLocalisation() {
+        localeProps.setCurrentLocale("Russian");
         String expected = "Тест пройден";
         assertThat(messageSource.getMessage("answer.passed", null, localeProps.getCurrentLocale())).
-          isEqualTo(expected);
+                isEqualTo(expected);
     }
 
     @Test
     void shouldExecuteEnglishInternationalization() {
-        localeProps.setCurrentLocale(Locale.forLanguageTag(localeProps.getAvailableLanguages().get("English")));
+        localeProps.setCurrentLocale("English");
         String expected = "Test has been passed";
         assertThat(messageSource.getMessage("answer.passed", null, localeProps.getCurrentLocale()))
-         .isEqualTo(expected);
+                .isEqualTo(expected);
     }
 
     @Test
@@ -63,9 +62,9 @@ public class CheckingServiceImplTest {
                 new Question("", "34"),
                 new Question("", "40")
         );
-       when(ioService.askInt()).thenReturn(11).thenReturn(21).
-        thenReturn(31).thenReturn(34).thenReturn(40);
+        when(ioService.askInt()).thenReturn(11).thenReturn(21).
+                thenReturn(31).thenReturn(34).thenReturn(40);
         int result = checkingService.check(questions);
-       assertThat(result).isEqualTo(5);
+        assertThat(result).isEqualTo(5);
     }
 }
