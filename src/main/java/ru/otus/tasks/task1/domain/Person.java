@@ -1,10 +1,10 @@
 package ru.otus.tasks.task1.domain;
 
 public class Person {
-    private String name;
-    private String familyName;
+    private final String name;
+    private final String familyName;
 
-    public String getName() {
+   public String getName() {
         return name;
     }
 

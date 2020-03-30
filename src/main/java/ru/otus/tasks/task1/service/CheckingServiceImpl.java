@@ -1,9 +1,11 @@
 package ru.otus.tasks.task1.service;
 
+import org.springframework.stereotype.Service;
 import ru.otus.tasks.task1.domain.Question;
 
 import java.util.List;
 
+@Service
 public class CheckingServiceImpl implements CheckingService {
     private final IOService ioService;
 
@@ -14,13 +16,15 @@ public class CheckingServiceImpl implements CheckingService {
     @Override
     public int check(List<Question> questionList) {
         int result = 0;
-            for (var question:questionList) {
-                int answer = this.ioService.askInt(question.getAsk());
-                if (answer == Integer.valueOf(question.getAnswer())) {
-                    result++;
-                }
-                ioService.print("Правильный ответ: " + question.getAnswer() + System.lineSeparator());
+        for (var question : questionList) {
+            ioService.printlnString(question.getAsk());
+            int answer = this.ioService.askInt();
+            if (answer == Integer.valueOf(question.getAnswer())) {
+                result++;
             }
+            ioService.printMessage("answer.right");
+            ioService.printlnString(question.getAnswer() + System.lineSeparator());
+        }
         return result;
     }
 }

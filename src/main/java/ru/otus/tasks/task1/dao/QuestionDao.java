@@ -1,10 +1,10 @@
 package ru.otus.tasks.task1.dao;
 
 import ru.otus.tasks.task1.domain.Question;
+import ru.otus.tasks.task1.exc.QuestionsLoadException;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface QuestionDao {
-    List<Question> getNewQuestions() throws IOException;
+    List<Question> getNewQuestions() throws QuestionsLoadException;
  }
