@@ -17,15 +17,13 @@ public class CheckingServiceImpl implements CheckingService {
     public int check(List<Question> questionList) {
         int result = 0;
         for (var question : questionList) {
-            ioService.printString("" + System.lineSeparator());
-            ioService.printString(question.getAsk());
+            ioService.printlnString(question.getAsk());
             int answer = this.ioService.askInt();
             if (answer == Integer.valueOf(question.getAnswer())) {
                 result++;
             }
-            ioService.printString("" + System.lineSeparator());
             ioService.printMessage("answer.right");
-            ioService.printString(question.getAnswer() + System.lineSeparator());
+            ioService.printlnString(question.getAnswer() + System.lineSeparator());
         }
         return result;
     }

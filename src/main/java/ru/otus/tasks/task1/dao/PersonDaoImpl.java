@@ -19,10 +19,11 @@ public class PersonDaoImpl implements PersonDao {
     public Person getNewPerson() {
         ioService.printMessage("question.surname");
         final String familyName = ioService.askStr();
-        ioService.printString(" " + System.lineSeparator());
+        ioService.printlnString("");
         ioService.printMessage("question.name");
         final String name = ioService.askStr();
         Person person = new Person(familyName, name);
+        ioService.printlnString("");
         return person;
     }
 }

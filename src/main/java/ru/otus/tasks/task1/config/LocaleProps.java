@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 
 @Component
-
 public class LocaleProps {
 
     private Map<String, String> availableLanguages;

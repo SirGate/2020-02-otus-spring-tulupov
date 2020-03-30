@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import ru.otus.tasks.task1.service.*;
 
 @Configuration
-@ComponentScan public class Main {
+@ComponentScan
+public class Main {
     public static void main(String[] args) {
  AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         Runner runner = context.getBean(RunnerImpl.class);

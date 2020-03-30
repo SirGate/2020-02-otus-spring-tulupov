@@ -45,9 +45,15 @@ public class ConsoleIOService implements IOService {
     }
 
     @Override
+    public void printlnString(String sentence) {
+        output.println(sentence + " ");
+    }
+
+    @Override
     public void printString(String sentence) {
         output.print(sentence + " ");
     }
+
 
     public void close() {
         this.in.close();

@@ -1,7 +1,6 @@
 package ru.otus.tasks.task1.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import ru.otus.tasks.task1.config.LocaleProps;
 import ru.otus.tasks.task1.dao.PersonDao;
@@ -13,7 +12,6 @@ import ru.otus.tasks.task1.exc.QuestionsLoadException;
 import java.util.List;
 
 @Service
-@PropertySource("classpath:application.properties")
 public class RunnerImpl implements Runner {
 
     private final PersonDao personDao;
@@ -36,14 +34,7 @@ public class RunnerImpl implements Runner {
     }
 
     public void startTesting() {
-        consoleIOService.printMessage("question.language");
-        final int language = consoleIOService.askInt();
-        consoleIOService.printString("" + System.lineSeparator());
-        String locale = "Russian";
-        if (language == 2) {
-            locale = "English";
-        }
-        localeProps.setCurrentLocale(locale);
+        chooseLanguage();
         Person person = personDao.getNewPerson();
         List<Question> questions = null;
         try {
@@ -52,21 +43,42 @@ public class RunnerImpl implements Runner {
             e.printStackTrace();
         }
         int result = checkingService.check(questions);
-        consoleIOService.printString("" + System.lineSeparator());
+        printResult(person, result);
+        consoleIOService.close();
+    }
+
+    private void printResult(Person person, int result) {
         consoleIOService.printMessage("answer.student");
         consoleIOService.printString(person.getFamilyName() + " " + person.getName());
         consoleIOService.printMessage("answer.result1");
         consoleIOService.printString(String.valueOf(result));
         consoleIOService.printMessage("answer.result2");
-        consoleIOService.printString(" " + System.lineSeparator());
+        consoleIOService.printlnString("" + System.lineSeparator());
 
         if (result < sufficientResult) {
-            consoleIOService.printString(" " + System.lineSeparator());
             consoleIOService.printMessage("answer.notpassed");
         } else {
-            consoleIOService.printString(" " + System.lineSeparator());
             consoleIOService.printMessage("answer.passed");
         }
-        consoleIOService.close();
+    }
+
+    private void chooseLanguage() {
+        consoleIOService.printMessage("question.language");
+        consoleIOService.printlnString("");
+        Integer counter = 1;
+        String[] languages = localeProps.getAvailableLanguages().keySet().
+                toArray(new String[localeProps.getAvailableLanguages().size()]);
+        for (String speech : languages) {
+            consoleIOService.printlnString((counter++) + "." + speech);
+        }
+        final int language = consoleIOService.askInt();
+        consoleIOService.printlnString("");
+        if (language > 0 && language < languages.length + 1) {
+            String locale = languages[language - 1];
+            localeProps.setCurrentLocale(locale);
+        } else {
+            consoleIOService.printlnString("Такого языка не существует. Выбран язык по умолчанию.");
+            consoleIOService.printlnString("");
+        }
     }
 }

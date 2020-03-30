@@ -5,5 +5,6 @@ public interface IOService {
     int askInt();
     void printMessage(String str);
     void printString(String str);
+    void printlnString(String str);
     void close();
 }
