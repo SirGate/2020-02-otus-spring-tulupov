@@ -1,0 +1,15 @@
+app:
+  availableLanguages:
+    English : en-Us
+    Russian : ru
+
+  questionFileByLanguages:
+    ru : questions_ru.csv
+    en_US : questions.csv
+
+defaultLocale: Russian
+
+sufficientResult: 3
+
+
+
