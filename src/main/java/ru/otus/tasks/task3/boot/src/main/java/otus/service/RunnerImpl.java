@@ -76,7 +76,7 @@ public class RunnerImpl implements Runner {
         consoleIOService.printlnString("");
         if (language > 0 && language < languages.length + 1) {
             String locale = languages[language - 1];
-            localeProps.setCurrentLocale(locale);
+            localeProps.setLocale(locale);
         } else {
             consoleIOService.printlnString("Такого языка не существует. Выбран язык по умолчанию.");
             consoleIOService.printlnString("");

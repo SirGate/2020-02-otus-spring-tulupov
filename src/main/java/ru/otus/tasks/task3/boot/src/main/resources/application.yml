@@ -7,9 +7,10 @@ app:
     ru : questions_ru.csv
     en_US : questions.csv
 
-defaultLocale: Russian
+  currentLocale: Russian
 
 sufficientResult: 3
 
-
-
+spring:
+  messages:
+    basename: messages, messages_ru

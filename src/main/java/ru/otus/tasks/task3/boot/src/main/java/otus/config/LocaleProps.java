@@ -1,7 +1,5 @@
 package otus.config;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,16 +9,19 @@ import java.util.*;
 @ConfigurationProperties(prefix = "app")
 public class LocaleProps {
 
-    private Map<String, String> availableLanguages = new HashMap<String, String>();
-    private Map<String, String> questionFileByLanguages = new HashMap<String, String>();
-    @Value("${defaultLocale}")
+    private Map<String, String> availableLanguages = new HashMap<>();
+    private Map<String, String> questionFileByLanguages = new HashMap<>();
     private Locale currentLocale;
+
+    public void setCurrentLocale(Locale currentLocale) {
+        this.currentLocale = currentLocale;
+    }
 
     public Locale getCurrentLocale() {
         return currentLocale;
     }
 
-    public void setCurrentLocale(String locale) {
+    public void setLocale(String locale) {
         currentLocale = availableLanguages.keySet().stream().filter(locale::equals).
                 findFirst().map(x -> Locale.forLanguageTag(availableLanguages.get(x)))
                 .orElseThrow(() -> new RuntimeException("Language doesn't available"));

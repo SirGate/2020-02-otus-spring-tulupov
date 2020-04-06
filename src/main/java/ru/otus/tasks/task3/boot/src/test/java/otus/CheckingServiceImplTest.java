@@ -33,7 +33,7 @@ public class CheckingServiceImplTest {
 
     @Test
     void shouldExecuteRussianLocalisation() {
-        localeProps.setCurrentLocale("Russian");
+        localeProps.setLocale("Russian");
         String expected = "Тест пройден";
         assertThat(messageSource.getMessage("answer.passed", null,
                 Locale.forLanguageTag(localeProps.getCurrentLocale().toString())))
@@ -43,7 +43,7 @@ public class CheckingServiceImplTest {
 
     @Test
     void shouldExecuteEnglishInternationalization() {
-        localeProps.setCurrentLocale("English");
+        localeProps.setLocale("English");
         String expected = "Test has been passed";
         assertThat(messageSource.getMessage("answer.passed", null,
                 Locale.forLanguageTag(localeProps.getCurrentLocale().toString())))
