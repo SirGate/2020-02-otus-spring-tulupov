@@ -13,4 +13,4 @@ sufficientResult: 3
 
 spring:
   messages:
-    basename: messages, messages_ru
+    fallback-to-system-locale: false
