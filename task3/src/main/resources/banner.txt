@@ -1,0 +1,13 @@
+
+
+${Ansi.RED} 88b           d88                       88
+${Ansi.RED} 888b         d888                ,d     88                 ,d                              ,d
+${Ansi.RED} 88`8b       d8'88                88     88                 88                              88
+${Ansi.RED} 88 `8b     d8' 88  ,adPPYYba,  MM88MMM  88,dPPYba,       MM88MMM   ,adPPYba,  ,adPPYba,  MM88MMM
+${Ansi.RED} 88  `8b   d8'  88  ""     `Y8    88     88P'    "8a        88     a8P_____88  I8[    ""    88
+${Ansi.RED} 88   `8b d8'   88  ,adPPPPP88    88     88       88        88     8PP"""""""   `"Y8ba,     88
+${Ansi.RED} 88    `888'    88  88,    ,88    88,    88       88        88,    "8b,   ,aa  aa    ]8I    88,
+${Ansi.RED} 88     `8'     88  `"8bbdP"Y8    "Y888  88       88        "Y888   `"Ybbd8"'  `"YbbdP"'    "Y888
+
+${Ansi.RED} :: Version: ${application.version} ::
+
