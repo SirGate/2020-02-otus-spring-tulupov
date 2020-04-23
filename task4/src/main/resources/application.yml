@@ -1,0 +1,16 @@
+app:
+  availableLanguages:
+    English : en-Us
+    Russian : ru
+
+  questionFileByLanguages:
+    ru : questions_ru.csv
+    en_US : questions.csv
+
+  currentLocale: ru
+
+sufficientResult: 3
+
+spring:
+  messages:
+    fallback-to-system-locale: false
