@@ -56,7 +56,6 @@ public class LibraryCommands {
     @ShellMethod(value = "Update Author's Surname and Name", key = "edit author")
     public void editAuthor(String nameOld, String surnameOld, String nameNew, String surnameNew) {
         Author author = authorDao.getBySurnameAndName(nameOld, surnameOld);
-        System.out.println("id: " + author.getId() + "Name: " + author.getName() + " " + author.getSurname());
         authorDao.update(author, nameNew, surnameNew);
     }
 

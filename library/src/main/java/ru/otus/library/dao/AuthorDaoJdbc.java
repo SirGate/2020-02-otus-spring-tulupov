@@ -1,17 +1,20 @@
 package ru.otus.library.dao;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import ru.otus.library.domain.Author;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository
+@Service
 public class AuthorDaoJdbc implements AuthorDao {
 
     private final NamedParameterJdbcOperations jdbc;
@@ -22,21 +25,41 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public int count() {
-        return jdbc.getJdbcOperations().queryForObject("select count(*) from authors", null, Integer.class);
+        return jdbc.getJdbcOperations().queryForObject("select count(id) from authors", null, Integer.class);
     }
 
-    @Override
     public void insert(Author author) {
-        jdbc.getJdbcOperations().
-                update("insert into authors (id, `name`, `surname`) values (?, ?, ?)",
-                        author.getId(), author.getName(), author.getSurname());
+        String query = "insert into authors values (:id, :name, :surname)";
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", author.getId());
+        params.put("name", author.getName());
+        params.put("surname", author.getSurname());
+        jdbc.execute(query, params, new PreparedStatementCallback() {
+            @Override
+            public Object doInPreparedStatement(PreparedStatement ps)
+                    throws SQLException, DataAccessException {
+                return ps.executeUpdate();
+            }
+        });
     }
 
     @Override
     public void update(Author author, String nameNew, String surnameNew) {
-        jdbc.getJdbcOperations().
-                update("update authors set `name` = ? , `surname` = ? where `name` = ? and `surname` = ? ",
-                        nameNew, surnameNew, author.getName(), author.getSurname());
+        String query = "update authors set name = :nameNew, surname = :surnameNew " +
+                "where name = :name and surname = :surname ";
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("nameNew", nameNew);
+        params.put("surnameNew", surnameNew);
+        params.put("name", author.getName());
+        params.put("surname", author.getSurname());
+        jdbc.execute(query, params, new PreparedStatementCallback() {
+            @Override
+            public Object doInPreparedStatement(PreparedStatement ps)
+                    throws SQLException, DataAccessException {
+                return ps.executeUpdate();
+            }
+        });
     }
 
     @Override
@@ -44,13 +67,13 @@ public class AuthorDaoJdbc implements AuthorDao {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("surname", surname);
-        return jdbc.queryForObject("select * from authors where name = :name and surname = :surname",
+        return jdbc.queryForObject("select id, name, surname from authors where name = :name and surname = :surname",
                 params, new AuthorMapper());
     }
 
     @Override
     public List<Author> getAll() {
-        return jdbc.query("select * from authors", new AuthorMapper());
+        return jdbc.query("select id, name, surname from authors", new AuthorMapper());
     }
 
     @Override

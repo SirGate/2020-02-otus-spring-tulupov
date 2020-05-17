@@ -70,7 +70,7 @@ class LibraryApplicationTests {
         Author author = authorDao.getBySurnameAndName("Mark", "Twain");
         bookDao.deleteByTitleAndAuthor("Huckleberry Finn", author);
         Throwable thrown = catchThrowable(() -> {
-            Book result = bookDao.getById(3);
+            bookDao.getById(3);
         });
         assertThat(thrown).isInstanceOf(EmptyResultDataAccessException.class);
     }
