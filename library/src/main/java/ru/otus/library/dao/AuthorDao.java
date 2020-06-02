@@ -3,16 +3,17 @@ package ru.otus.library.dao;
 import ru.otus.library.domain.Author;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface AuthorDao {
 
-    int count();
+    long count();
 
-    void insert(Author author);
+    Author insert(Author author);
 
     void update(Author author, String nameNew, String surnameNew);
 
-    Author getBySurnameAndName(String name, String surname);
+    Optional<Author> getBySurnameAndName(String name, String surname);
 
     List<Author> getAll();
 

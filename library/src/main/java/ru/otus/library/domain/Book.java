@@ -1,32 +1,58 @@
 package ru.otus.library.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "books")
 public class Book {
-    private final long id;
-    private final String title;
-    private final Author author;
-    private final Genre genre;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public Book(long id, String title, Author author, Genre genre) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
+    @BatchSize(size = 20)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "books_authors", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
+    private List<Author> authors = new ArrayList<>();
+
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "genre_id")
+    private Genre genre;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private List<Comment> comments = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setBook(this);
     }
 
-    public long getId() {
-        return id;
+    public void removeComment(Comment comment) {
+        this.comments.remove(comment);
+        comment.setBook(null);
     }
 
-    public String getTitle() {
-        return title;
+    public void addAuthor(Author author) {
+        authors.add(author);
     }
 
-    public Author getAuthor() {
-        return author;
-    }
-
-    public Genre getGenre() {
-        return genre;
+    public void removeAuthor(Author author) {
+        authors.remove(author);
+        this.setAuthors(authors);
     }
 }

@@ -3,16 +3,17 @@ package ru.otus.library.dao;
 import ru.otus.library.domain.Genre;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GenreDao {
 
-    int count();
+    long count();
 
-    void insert(Genre genre);
+    Genre insert(Genre genre);
 
     void update(Genre genre, String descriptioNew);
 
-   Genre getByDescription(String description);
+    Optional<Genre> getByDescription(String description);
 
     List<Genre> getAll();
 
