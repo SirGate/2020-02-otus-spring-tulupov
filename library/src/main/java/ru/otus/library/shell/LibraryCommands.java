@@ -153,11 +153,9 @@ public class LibraryCommands {
         System.out.println("All count " + commentDao.count());
         if (bookDao.getById(id).isPresent()) {
             Book book = bookDao.getById(id).get();
-            if (commentDao.getAll(book).isPresent()) {
-                for (Comment comment : commentDao.getAll(book).get()) {
+                for (Comment comment : bookDao.getAllComments(book).get()) {
                     System.out.println("Comment id: " + comment.getId() + "  " + comment.getText());
                 }
-            }
         }
     }
 

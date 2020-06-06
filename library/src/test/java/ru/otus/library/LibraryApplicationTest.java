@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.library.dao.AuthorDaoORM;
 import ru.otus.library.dao.BookDaoORM;
-import ru.otus.library.dao.CommentDaoORM;
 import ru.otus.library.dao.GenreDaoORM;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
@@ -21,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Dao by jpa is for work with books")
 @DataJpaTest
-@Import({BookDaoORM.class, AuthorDaoORM.class, GenreDaoORM.class, CommentDaoORM.class})
+@Import({BookDaoORM.class, AuthorDaoORM.class, GenreDaoORM.class})
 class LibraryApplicationTest {
 
     @Autowired
@@ -35,9 +34,6 @@ class LibraryApplicationTest {
 
     @Autowired
     AuthorDaoORM authorDao;
-
-    @Autowired
-    CommentDaoORM commentDao;
 
     @DisplayName("Should return book by id")
     @Test
@@ -62,7 +58,7 @@ class LibraryApplicationTest {
     @Test
     void shouldReturnCommentsForBook() {
         val book = em.find(Book.class, 1L);
-        val comments = commentDao.getAll(book);
+        val comments = bookDao.getAllComments(book);
         assertThat(comments.get()).isNotNull().hasSize(3)
                 .allMatch(s -> !s.getText().equals(""));
     }
@@ -90,7 +86,6 @@ class LibraryApplicationTest {
         String titleExpected = "Invincible";
         String oldTitle = em.find(Book.class, 1L).getTitle();
         bookDao.update(1L, "Invincible");
-        em.clear();
         String newTitle = em.find(Book.class, 1L).getTitle();
         assertThat(newTitle).isNotEqualTo(oldTitle).isEqualTo(titleExpected);
     }
@@ -99,7 +94,6 @@ class LibraryApplicationTest {
     @Test
     void WhenDeleteBook() throws EmptyResultDataAccessException {
         bookDao.deleteById(2L);
-        em.clear();
         Book deletedBook = em.find(Book.class, 2L);
         assertThat(deletedBook).isNull();
     }

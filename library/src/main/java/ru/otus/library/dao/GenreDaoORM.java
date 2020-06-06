@@ -8,7 +8,6 @@ import ru.otus.library.domain.Genre;
 import javax.persistence.*;
 import java.util.*;
 
-@Transactional
 @Service
 public class GenreDaoORM implements GenreDao {
 
@@ -22,6 +21,7 @@ public class GenreDaoORM implements GenreDao {
         return (long) query.getSingleResult();
     }
 
+    @Transactional
     @Override
     public Genre insert(Genre genre) {
         if (genre.getId() <= 0) {
@@ -32,14 +32,11 @@ public class GenreDaoORM implements GenreDao {
         }
     }
 
+    @Transactional
     @Override
     public void update(Genre genre, String descriptionNew) {
-        Query query = em.createQuery("update Genre g " +
-                "set g.description = :descriptionNew " +
-                "where g = :genre");
-        query.setParameter("descriptionNew", descriptionNew);
-        query.setParameter("genre", genre);
-        query.executeUpdate();
+        Genre editedGenre = em.find(Genre.class, genre.getId());
+        editedGenre.setDescription(descriptionNew);
     }
 
     @Override
@@ -60,12 +57,12 @@ public class GenreDaoORM implements GenreDao {
         return query.getResultList();
     }
 
+    @Transactional
     @Override
     public void deleteByDescription(String description) {
-        Query query = em.createQuery("delete " +
-                "from Genre g " +
-                "where g.description = :description");
-        query.setParameter("description", description);
-        query.executeUpdate();
+        Optional<Genre> genre = getByDescription(description);
+        if (genre.isPresent()) {
+            em.remove(genre.get());
+        }
     }
 }

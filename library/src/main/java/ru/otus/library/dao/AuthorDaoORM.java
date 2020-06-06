@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.util.*;
 
 
-@Transactional
 @Service
 public class AuthorDaoORM implements AuthorDao {
 
@@ -23,6 +22,7 @@ public class AuthorDaoORM implements AuthorDao {
         return (long) query.getSingleResult();
     }
 
+    @Transactional
     @Override
     public Author insert(Author author) {
         if (author.getId() <= 0) {
@@ -33,16 +33,12 @@ public class AuthorDaoORM implements AuthorDao {
         }
     }
 
+    @Transactional
     @Override
     public void update(Author author, String nameNew, String surnameNew) {
-        Query query = em.createQuery("update Author a " +
-                "set a.name = :nameNew," +
-                "a.surname = :surnameNew " +
-                "where a = :author");
-        query.setParameter("nameNew", nameNew);
-        query.setParameter("surnameNew", surnameNew);
-        query.setParameter("author", author);
-        query.executeUpdate();
+        Author editedAuthor = em.find(Author.class, author.getId());
+        editedAuthor.setName(nameNew);
+        editedAuthor.setSurname(surnameNew);
     }
 
     @Override
@@ -64,12 +60,13 @@ public class AuthorDaoORM implements AuthorDao {
         return query.getResultList();
     }
 
+    @Transactional
     @Override
     public void deleteBySurnameAndName(String name, String surname) {
-        Query query = em.createQuery("delete from Author a " +
-                "where a.name = :name and a.surname = :surname");
-        query.setParameter("name", name);
-        query.setParameter("surname", surname);
-        query.executeUpdate();
+
+        Optional<Author> author = getBySurnameAndName(name, surname);
+        if (author.isPresent()) {
+            em.remove(author.get());
+        }
     }
 }
