@@ -20,5 +20,5 @@ public interface BookDao {
 
     void deleteById(long id);
 
-    Optional<List<Comment>> getAllComments(Book book);
+    Optional<List<Comment>> getAllComments(long id);
 }

@@ -62,10 +62,8 @@ public class BookDaoORM implements BookDao {
 
     @Transactional
     @Override
-    public Optional<List<Comment>> getAllComments(Book book) {
-        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.book = :book",
-                Comment.class);
-        query.setParameter("book", book);
-        return Optional.ofNullable(query.getResultList());
+    public Optional<List<Comment>> getAllComments(long id) {
+       Book book = em.find(Book.class, id);
+       return Optional.ofNullable(book.getComments());
     }
 }

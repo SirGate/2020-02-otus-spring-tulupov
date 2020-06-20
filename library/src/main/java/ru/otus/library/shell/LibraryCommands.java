@@ -12,6 +12,10 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
 @ShellComponent
 @AllArgsConstructor
 public class LibraryCommands {
@@ -148,14 +152,14 @@ public class LibraryCommands {
         }
     }
 
+    @Transactional
     @ShellMethod(value = "Show all coments for book", key = "getAllC")
     public void getAllComments(long id) {
-        System.out.println("All count " + commentDao.count());
         if (bookDao.getById(id).isPresent()) {
-            Book book = bookDao.getById(id).get();
-                for (Comment comment : bookDao.getAllComments(book).get()) {
-                    System.out.println("Comment id: " + comment.getId() + "  " + comment.getText());
-                }
+            List<Comment> comments = bookDao.getById(id).get().getComments();
+            for (Comment comment : comments) {
+                System.out.println("Comment id: " + comment.getId() + "  " + comment.getText());
+            }
         }
     }
 

@@ -22,3 +22,4 @@ public class Comment {
     @Column(name = "text", nullable = false)
     private String text;
 }
+

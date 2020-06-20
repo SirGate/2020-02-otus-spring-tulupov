@@ -58,7 +58,7 @@ class LibraryApplicationTest {
     @Test
     void shouldReturnCommentsForBook() {
         val book = em.find(Book.class, 1L);
-        val comments = bookDao.getAllComments(book);
+        val comments = bookDao.getAllComments(book.getId());
         assertThat(comments.get()).isNotNull().hasSize(3)
                 .allMatch(s -> !s.getText().equals(""));
     }
