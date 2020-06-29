@@ -3,7 +3,6 @@ package ru.otus.library.shell;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.otus.library.dao.AuthorDao;
 import ru.otus.library.dao.BookDao;
 import ru.otus.library.dao.CommentDao;
 import ru.otus.library.dao.GenreDao;

@@ -2,7 +2,6 @@ package ru.otus.library.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.library.dao.AuthorDao;
 import ru.otus.library.dao.BookDao;
 import ru.otus.library.dao.CommentDao;
 import ru.otus.library.dao.GenreDao;
