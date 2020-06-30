@@ -12,6 +12,7 @@ import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.library.repository.AuthorRepository;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 public class LibraryCommands {
     private final GenreDao genreDao;
     private final BookDao bookDao;
-    private final AuthorDao authorDao;
+    private final AuthorRepository authorRepository;
     private final CommentDao commentDao;
 
 
@@ -57,26 +58,32 @@ public class LibraryCommands {
         Author author = new Author();
         author.setName(name);
         author.setSurname(surname);
-        authorDao.insert(author);
+        authorRepository.save(author);
     }
 
     @ShellMethod(value = "Update Author's Surname and Name", key = "edit author")
     public void editAuthor(String nameOld, String surnameOld, String nameNew, String surnameNew) {
-        if (authorDao.getBySurnameAndName(nameOld, surnameOld).isPresent()) {
-            Author author = authorDao.getBySurnameAndName(nameOld, surnameOld).get();
-            authorDao.update(author, nameNew, surnameNew);
+        if (authorRepository.findBySurnameAndName(surnameOld, nameOld).isPresent()) {
+            Author author = authorRepository.findBySurnameAndName(surnameOld, nameOld).get();
+            author.setName(nameNew);
+            author.setSurname(surnameNew);
+            authorRepository.save(author);
         }
     }
 
     @ShellMethod(value = "Delete Author by name and surname", key = "delete author")
     public void deleteAuthor(String name, String surname) {
-        authorDao.deleteBySurnameAndName(name, surname);
+        if (authorRepository.findBySurnameAndName(surname, name).isPresent()) {
+            long id = authorRepository.findBySurnameAndName(surname, name).get().getId();
+            authorRepository.deleteById(id);
+        }
+
     }
 
     @ShellMethod(value = "Show all Authors", key = "getAllA")
     public void getAllA() {
-        System.out.println("All count " + authorDao.count());
-        for (Author author : authorDao.getAll()) {
+        System.out.println("All count " + authorRepository.count());
+        for (Author author : authorRepository.findAll()) {
             System.out.println("Author id: " + author.getId() + " " + "Name: " + author.getName() + " " + author.getSurname());
         }
     }
@@ -101,13 +108,13 @@ public class LibraryCommands {
             genre.setDescription(genreDescription);
             genreDao.insert(genre);
         }
-        if (authorDao.getBySurnameAndName(authorName, authorsurname).isPresent()) {
-            author = authorDao.getBySurnameAndName(authorName, authorsurname).get();
+        if (authorRepository.findBySurnameAndName(authorName, authorsurname).isPresent()) {
+            author = authorRepository.findBySurnameAndName(authorName, authorsurname).get();
         } else {
             author = new Author();
             author.setName(authorName);
             author.setSurname(authorsurname);
-            authorDao.insert(author);
+            authorRepository.save(author);
         }
         Book book = new Book();
         book.setTitle(title);
@@ -123,14 +130,14 @@ public class LibraryCommands {
         if (bookDao.getById(id).isPresent()) {
             book = bookDao.getById(id).get();
         }
-        if (authorDao.getBySurnameAndName(authorName, authorsurname).isPresent()) {
-            author = authorDao.getBySurnameAndName(authorName, authorsurname).get();
+        if (authorRepository.findBySurnameAndName(authorName, authorsurname).isPresent()) {
+            author = authorRepository.findBySurnameAndName(authorName, authorsurname).get();
         }
         if (author == null) {
             author = new Author();
             author.setName(authorName);
             author.setSurname(authorsurname);
-            authorDao.insert(author);
+            authorRepository.save(author);
         }
         book.addAuthor(author);
         bookDao.insert(book);

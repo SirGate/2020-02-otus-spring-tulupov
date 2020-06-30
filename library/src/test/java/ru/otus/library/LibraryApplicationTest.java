@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
-import ru.otus.library.dao.AuthorDaoORM;
 import ru.otus.library.dao.BookDaoORM;
 import ru.otus.library.dao.GenreDaoORM;
 import ru.otus.library.domain.Author;
@@ -32,8 +31,8 @@ class LibraryApplicationTest {
     @Autowired
     GenreDaoORM genreDao;
 
-    @Autowired
-    AuthorDaoORM authorDao;
+    /*@Autowired
+    AuthorRepository authorRepository;*/
 
     @DisplayName("Should return book by id")
     @Test
