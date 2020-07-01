@@ -3,9 +3,6 @@ package ru.otus.library.shell;
 import lombok.AllArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
-import ru.otus.library.dao.BookDao;
-import ru.otus.library.dao.CommentDao;
-import ru.otus.library.dao.GenreDao;
 import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
@@ -13,48 +10,55 @@ import ru.otus.library.domain.Genre;
 
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.repository.AuthorRepository;
+import ru.otus.library.repository.BookRepository;
+import ru.otus.library.repository.CommentRepository;
+import ru.otus.library.repository.GenreRepository;
 
 import java.util.List;
 
 @ShellComponent
 @AllArgsConstructor
 public class LibraryCommands {
-    private final GenreDao genreDao;
-    private final BookDao bookDao;
+    private final GenreRepository genreRepository;
+    private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
-    private final CommentDao commentDao;
+    private final CommentRepository commentRepository;
 
 
     @ShellMethod(value = "Create Genre", key = "create genre")
-    public void insertGenre(String description) {
+    public void saveGenre(String description) {
         Genre genre = new Genre();
         genre.setDescription(description);
-        genreDao.insert(genre);
+        genreRepository.save(genre);
     }
 
     @ShellMethod(value = "Update Genre description", key = "edit genre")
     public void editGenre(String descriptionOld, String descriptionNew) {
-        if (genreDao.getByDescription(descriptionOld).isPresent()) {
-            Genre genre = genreDao.getByDescription(descriptionOld).get();
-            genreDao.update(genre, descriptionNew);
+        if (genreRepository.getByDescription(descriptionOld).isPresent()) {
+            Genre genre = genreRepository.getByDescription(descriptionOld).get();
+            genre.setDescription(descriptionNew);
+            genreRepository.save(genre);
         }
     }
 
     @ShellMethod(value = "Delete Genre by description", key = "delete genre")
     public void deleteGenre(String description) {
-        genreDao.deleteByDescription(description);
+        if (genreRepository.getByDescription(description).isPresent()) {
+            long id = genreRepository.getByDescription(description).get().getId();
+            genreRepository.deleteById(id);
+        }
     }
 
     @ShellMethod(value = "Show all genres", key = "getAllG")
     public void getAllG() {
-        System.out.println("All count " + genreDao.count());
-        for (Genre genre : genreDao.getAll()) {
+        System.out.println("All count " + genreRepository.count());
+        for (Genre genre : genreRepository.findAll()) {
             System.out.println("Genre id: " + genre.getId() + " description: " + genre.getDescription());
         }
     }
 
     @ShellMethod(value = "Create Author", key = "create author")
-    public void insertAuthor(String name, String surname) {
+    public void saveAuthor(String name, String surname) {
         Author author = new Author();
         author.setName(name);
         author.setSurname(surname);
@@ -90,23 +94,23 @@ public class LibraryCommands {
 
     @ShellMethod(value = "Show all books in the library", key = "getAllB")
     public void getAllB() {
-        System.out.println("All count " + bookDao.count());
-        for (Book book : bookDao.getAll()) {
+        System.out.println("All count " + bookRepository.count());
+        for (Book book : bookRepository.findAll()) {
             System.out.println("Book id: " + book.getId() + " title: " + book.getTitle() + " " + book.getAuthors().toString() +
                     " " + book.getGenre().toString());
         }
     }
 
     @ShellMethod(value = "Create Book", key = "create book")
-    public void insertBook(String title, String authorName, String authorsurname, String genreDescription) {
+    public void saveBook(String title, String authorName, String authorsurname, String genreDescription) {
         Genre genre = null;
         Author author = null;
-        if (genreDao.getByDescription(genreDescription).isPresent()) {
-            genre = genreDao.getByDescription(genreDescription).get();
+        if (genreRepository.getByDescription(genreDescription).isPresent()) {
+            genre = genreRepository.getByDescription(genreDescription).get();
         } else {
             genre = new Genre();
             genre.setDescription(genreDescription);
-            genreDao.insert(genre);
+            genreRepository.save(genre);
         }
         if (authorRepository.findBySurnameAndName(authorName, authorsurname).isPresent()) {
             author = authorRepository.findBySurnameAndName(authorName, authorsurname).get();
@@ -120,15 +124,15 @@ public class LibraryCommands {
         book.setTitle(title);
         book.addAuthor(author);
         book.setGenre(genre);
-        bookDao.insert(book);
+        bookRepository.save(book);
     }
 
     @ShellMethod(value = "add additional author", key = "add author")
-    public void insertAuthor(long id, String authorName, String authorsurname) {
+    public void saveAuthor(long id, String authorName, String authorsurname) {
         Author author = null;
         Book book = null;
-        if (bookDao.getById(id).isPresent()) {
-            book = bookDao.getById(id).get();
+        if (bookRepository.findById(id).isPresent()) {
+            book = bookRepository.findById(id).get();
         }
         if (authorRepository.findBySurnameAndName(authorName, authorsurname).isPresent()) {
             author = authorRepository.findBySurnameAndName(authorName, authorsurname).get();
@@ -140,44 +144,46 @@ public class LibraryCommands {
             authorRepository.save(author);
         }
         book.addAuthor(author);
-        bookDao.insert(book);
+        bookRepository.save(book);
     }
 
     @ShellMethod(value = "Update book title", key = "edit book")
     public void editByTitle(String title, long id, String titleNew) {
-        if (bookDao.getById(id).isPresent()) {
-            bookDao.update(id, titleNew);
+        if (bookRepository.findById(id).isPresent()) {
+            Book book = bookRepository.findById(id).get();
+            book.setTitle(titleNew);
+            bookRepository.save(book);
         }
     }
 
     @ShellMethod(value = "Delete by id", key = "delete book")
     public void deleteByTitle(long id) {
-        if (bookDao.getById(id).isPresent()) {
-            Book book = bookDao.getById(id).get();
-            bookDao.deleteById(id);
+        if (bookRepository.findById(id).isPresent()) {
+            Book book = bookRepository.findById(id).get();
+            bookRepository.deleteById(id);
         }
     }
 
     @Transactional
     @ShellMethod(value = "Show all coments for book", key = "getAllC")
     public void getAllComments(long id) {
-        if (bookDao.getById(id).isPresent()) {
-            List<Comment> comments = bookDao.getById(id).get().getComments();
+        if (bookRepository.findById(id).isPresent()) {
+            List<Comment> comments = bookRepository.findById(id).get().getComments();
             for (Comment comment : comments) {
                 System.out.println("Comment id: " + comment.getId() + "  " + comment.getText());
             }
         }
     }
 
-    @ShellMethod(value = "write Comment", key = "write comment")
-    public void insertComment(long id, String text) {
+    @ShellMethod(value = "write Comment by book id", key = "write comment")
+    public void saveComment(long id, String text) {
         Book book = null;
-        if (bookDao.getById(id).isPresent()) {
-            book = bookDao.getById(id).get();
+        if (bookRepository.findById(id).isPresent()) {
+            book = bookRepository.findById(id).get();
             Comment comment = new Comment();
             comment.setText(text);
             comment.setBook(book);
-            commentDao.insert(comment);
+            commentRepository.save(comment);
         }
     }
 }
