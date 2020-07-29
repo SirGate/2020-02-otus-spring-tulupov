@@ -32,7 +32,7 @@ public class GenreCommands {
     @ShellMethod(value = "Delete Genre by description", key = "delete genre")
     public void deleteGenre(String description) {
         if (genreRepository.getByDescription(description).isPresent()) {
-            long id = genreRepository.getByDescription(description).get().getId();
+           String id = genreRepository.getByDescription(description).get().getId();
             genreRepository.deleteById(id);
         }
     }

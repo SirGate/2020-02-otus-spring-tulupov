@@ -54,7 +54,7 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "add additional author", key = "add author")
-    public void saveAuthor(long id, String authorName, String authorsurname) {
+    public void saveAuthor(String id, String authorName, String authorsurname) {
         Author author = null;
         Book book = null;
         if (bookRepository.findById(id).isPresent()) {
@@ -74,7 +74,7 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "Update book title", key = "edit book")
-    public void editByTitle(String title, long id, String titleNew) {
+    public void editByTitle(String title, String id, String titleNew) {
         if (bookRepository.findById(id).isPresent()) {
             Book book = bookRepository.findById(id).get();
             book.setTitle(titleNew);
@@ -83,7 +83,7 @@ public class BookCommands {
     }
 
     @ShellMethod(value = "Delete by id", key = "delete book")
-    public void deleteByTitle(long id) {
+    public void deleteByTitle(String id) {
         if (bookRepository.findById(id).isPresent()) {
             Book book = bookRepository.findById(id).get();
             bookRepository.deleteById(id);

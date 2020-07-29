@@ -20,7 +20,7 @@ public class CommentCommands {
 
     @Transactional
     @ShellMethod(value = "Show all coments for book", key = "getAllC")
-    public void getAllComments(long id) {
+    public void getAllComments(String id) {
         if (bookRepository.findById(id).isPresent()) {
             List<Comment> comments = bookRepository.findById(id).get().getComments();
             for (Comment comment : comments) {
@@ -30,7 +30,7 @@ public class CommentCommands {
     }
 
     @ShellMethod(value = "write Comment by book id", key = "write comment")
-    public void saveComment(long id, String text) {
+    public void saveComment(String id, String text) {
         Book book = null;
         if (bookRepository.findById(id).isPresent()) {
             book = bookRepository.findById(id).get();

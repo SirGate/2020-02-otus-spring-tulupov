@@ -33,7 +33,7 @@ public class AuthorCommands {
     @ShellMethod(value = "Delete Author by name and surname", key = "delete author")
     public void deleteAuthor(String name, String surname) {
         if (authorRepository.findBySurnameAndName(surname, name).isPresent()) {
-            long id = authorRepository.findBySurnameAndName(surname, name).get().getId();
+            String id = authorRepository.findBySurnameAndName(surname, name).get().getId();
             authorRepository.deleteById(id);
         }
 
