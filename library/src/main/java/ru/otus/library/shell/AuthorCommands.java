@@ -14,10 +14,12 @@ public class AuthorCommands {
 
     @ShellMethod(value = "Create Author", key = "create author")
     public void saveAuthor(String name, String surname) {
-        Author author = new Author();
-        author.setName(name);
-        author.setSurname(surname);
-        authorRepository.save(author);
+        if (!authorRepository.findBySurnameAndName(surname, name).isPresent()) {
+            Author author = new Author();
+            author.setName(name);
+            author.setSurname(surname);
+            authorRepository.save(author);
+        }
     }
 
     @ShellMethod(value = "Update Author's Surname and Name", key = "edit author")
@@ -43,7 +45,8 @@ public class AuthorCommands {
     public void getAllA() {
         System.out.println("All count " + authorRepository.count());
         for (Author author : authorRepository.findAll()) {
-            System.out.println("Author id: " + author.getId() + " " + "Name: " + author.getName() + " " + author.getSurname());
+            System.out.println("Author id: " + author.getId() + " " + "Name: " + author.getName() + " "
+                    + author.getSurname() + author.getBooks());
         }
     }
 }

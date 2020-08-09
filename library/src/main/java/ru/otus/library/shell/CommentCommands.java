@@ -1,14 +1,15 @@
 package ru.otus.library.shell;
 
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.repository.CommentRepository;
+import ru.otus.library.service.Input;
 
 import java.util.List;
 
@@ -17,27 +18,66 @@ import java.util.List;
 public class CommentCommands {
     private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
+    private final Input consoleInput;
 
-    @Transactional
     @ShellMethod(value = "Show all coments for book", key = "getAllC")
-    public void getAllComments(String id) {
-        if (bookRepository.findById(id).isPresent()) {
-            List<Comment> comments = bookRepository.findById(id).get().getComments();
-            for (Comment comment : comments) {
-                System.out.println("Comment id: " + comment.getId() + "  " + comment.getText());
+    public void getAllComments(String bookTitle) {
+        Book book = null;
+        if (bookRepository.findByTitle(bookTitle).isPresent()) {
+            val books = bookRepository.findByTitle(bookTitle).get();
+            int index = 1;
+            for (Book item : books) {
+                System.out.println(index + " " + " title: " + item.getTitle()
+                        + " " + item.getAuthors().toString() +
+                        " " + item.getGenre().toString());
+                index++;
+            }
+            if (books.size() > 0) {
+                int entered = consoleInput.askInt(
+                        "Please input index number of a book which comments you want to see or press 'c' to cancel:",
+                        books.size());
+                if (entered > 0) {
+                    book = bookRepository.findById(books.get(entered - 1).getId()).get();
+                    List<Comment> comments = book.getComments();
+                    for (Comment comment : comments) {
+                        System.out.println("Comment id: " + comment.getId() + "  " + comment.getText());
+                    }
+                }
+            } else {
+                System.out.println("Книги с таким названием нет.");
             }
         }
     }
 
-    @ShellMethod(value = "write Comment by book id", key = "write comment")
-    public void saveComment(String id, String text) {
+    @ShellMethod(value = "write Comment by book title", key = "write comment")
+    public void saveComment(String bookTitle, String text) {
         Book book = null;
-        if (bookRepository.findById(id).isPresent()) {
-            book = bookRepository.findById(id).get();
-            Comment comment = new Comment();
-            comment.setText(text);
-            comment.setBook(book);
-            commentRepository.save(comment);
+        if (bookRepository.findByTitle(bookTitle).isPresent()) {
+            val books = bookRepository.findByTitle(bookTitle).get();
+            int index = 1;
+            for (Book item : books) {
+                System.out.println(index + " " + " title: " + item.getTitle()
+                        + " " + item.getAuthors().toString() +
+                        " " + item.getGenre().toString());
+                index++;
+            }
+            if (books.size() > 0) {
+                int entered = consoleInput.askInt(
+                        "Please input index number of the commented book or press 'c' to cancel:",
+                        books.size());
+                if (entered > 0) {
+                    book = bookRepository.findById(books.get(entered - 1).getId()).get();
+                    Comment comment = new Comment();
+                    comment.setText(text);
+                    // comment.setBook(book);
+                    book.addComment(comment);
+                    commentRepository.save(comment);
+                    bookRepository.save(book);
+                }
+            }
+        } else {
+            System.out.println("Книги с таким названием нет.");
         }
     }
 }
+

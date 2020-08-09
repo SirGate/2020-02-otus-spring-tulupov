@@ -12,9 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "genres")
 public class Genre {
     @Id
-  //  @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
-
- //   @Column(name = "description", nullable = false)
     private String description;
+
+    public Genre(String description) {
+        this.description = description;
+    }
 }

@@ -15,9 +15,11 @@ public class GenreCommands {
 
     @ShellMethod(value = "Create Genre", key = "create genre")
     public void saveGenre(String description) {
-        Genre genre = new Genre();
-        genre.setDescription(description);
-        genreRepository.save(genre);
+        if (!genreRepository.getByDescription(description).isPresent()) {
+            Genre genre = new Genre();
+            genre.setDescription(description);
+            genreRepository.save(genre);
+        }
     }
 
     @ShellMethod(value = "Update Genre description", key = "edit genre")
@@ -32,7 +34,7 @@ public class GenreCommands {
     @ShellMethod(value = "Delete Genre by description", key = "delete genre")
     public void deleteGenre(String description) {
         if (genreRepository.getByDescription(description).isPresent()) {
-           String id = genreRepository.getByDescription(description).get().getId();
+            String id = genreRepository.getByDescription(description).get().getId();
             genreRepository.deleteById(id);
         }
     }
