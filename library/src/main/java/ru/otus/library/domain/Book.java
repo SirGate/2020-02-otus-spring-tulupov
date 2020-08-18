@@ -1,16 +1,17 @@
 package ru.otus.library.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "books")
@@ -21,12 +22,6 @@ public class Book {
     private String title;
     private List<Author> authors = new ArrayList<>();
     private List<Comment> comments = new ArrayList<>();
-
-    public Book(String title, Genre genre, Author... authors) {
-        this.title = title;
-        this.genre = genre;
-        this.authors = Arrays.asList(authors);
-    }
 
     public void addAuthor(Author author) {
         authors.add(author);

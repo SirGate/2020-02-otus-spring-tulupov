@@ -2,7 +2,6 @@ package ru.otus.library.events;
 
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import lombok.var;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;

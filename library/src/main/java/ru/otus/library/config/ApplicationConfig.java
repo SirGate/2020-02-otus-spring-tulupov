@@ -8,13 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ApplicationConfig {
-
-
-    private static final String CHANGELOGS_PACKAGE = "ru.otus.library.changelogs";
-
     @Bean
     public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {
-        return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), CHANGELOGS_PACKAGE)
+        return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), mongoProps.CHANGELOGS_PACKAGE)
                 .build();
     }
 }

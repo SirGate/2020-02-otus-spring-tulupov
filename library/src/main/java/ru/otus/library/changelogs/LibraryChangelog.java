@@ -10,6 +10,8 @@ import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
 
+import java.util.List;
+
 
 @ChangeLog(order = "001")
 public class LibraryChangelog {
@@ -39,13 +41,12 @@ public class LibraryChangelog {
 
     @ChangeSet(order = "003", id = "addBookWithComments", author = "SirGate", runAlways = true)
     public void insertBooks(MongoTemplate template) {
-        book = new Book("Solaris", fiction, Lem);
         comment1.setText("It's a good book");
-        book.addComment(comment1);
         template.save(comment1);
         comment2.setText("It's a splendid book");
-        book.addComment(comment2);
         template.save(comment2);
+        book = Book.builder().title("Solaris").genre(fiction).
+                authors(List.of(Lem)).comments(List.of(comment1, comment2)).build();
         template.save(book);
         Lem.addBook(book);
         template.save(Lem);

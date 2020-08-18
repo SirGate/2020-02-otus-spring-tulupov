@@ -49,17 +49,15 @@ class LibraryApplicationTest {
             val author = authorRepository.
                     findBySurnameAndName("Lem", "Stanislav").get();
             val genre = genreRepository.getByDescription("Science fiction").get();
-            Book book = new Book("Solaris", genre, author);
             Comment comment1 = new Comment();
             comment1.setText("It's a good book");
-            book.addComment(comment1);
-            bookRepository.save(book);
             commentRepository.save(comment1);
             Comment comment2 = new Comment();
             comment2.setText("It's a bad book");
-            book.addComment(comment2);
-            bookRepository.save(book);
             commentRepository.save(comment2);
+            Book book = Book.builder().title("Solaris").genre(genre).
+                    authors(List.of(author)).comments(List.of(comment1, comment2)).build();
+            bookRepository.save(book);
         }
         val book = bookRepository.findByTitle("Solaris").get().get(0);
         List<Comment> comments = book.getComments();
@@ -72,7 +70,7 @@ class LibraryApplicationTest {
     void shouldReturnCreatedAuthorAndCreatedGenreAfterBookCreation() {
         val author = new Author("Gianni", "Rodari");
         val genre = new Genre("Fairytales");
-        val book = new Book("Chippolino", genre, author);
+        val book = Book.builder().title("Chippolino").genre(genre).authors(List.of(author)).build();
         bookRepository.save(book);
         val expectedAuthor = authorRepository.
                 findBySurnameAndName("Rodari", "Gianni").get();

@@ -69,7 +69,6 @@ public class CommentCommands {
                     book = bookRepository.findById(books.get(entered - 1).getId()).get();
                     Comment comment = new Comment();
                     comment.setText(text);
-                    // comment.setBook(book);
                     book.addComment(comment);
                     commentRepository.save(comment);
                     bookRepository.save(book);
