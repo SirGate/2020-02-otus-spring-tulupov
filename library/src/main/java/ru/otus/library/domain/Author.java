@@ -1,6 +1,7 @@
 package ru.otus.library.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "authors")
@@ -21,7 +23,7 @@ public class Author {
     private String surname;
 
     @DBRef
-    List<Book> books = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
     public Author(String name, String surname) {
         this.name = name;
@@ -34,5 +36,22 @@ public class Author {
 
     public void deleteBook(Book book) {
         books.remove(book);
+    }
+
+    public String printBooks() {
+        String allBooks = "";
+        int count = 0;
+        for (var str : books) {
+            if (str != null) {
+                allBooks += str.getTitle();
+                count++;
+                if (count == books.size()) {
+                    allBooks += ".";
+                } else {
+                    allBooks += ", ";
+                }
+            }
+        }
+        return allBooks;
     }
 }

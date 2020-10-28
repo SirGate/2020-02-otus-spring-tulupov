@@ -1,0 +1,20 @@
+body {
+    padding: 50px;
+    background-color: beige;
+}
+h1 {
+    margin-top: 50px;
+}
+.wrapper {
+    display: flex;
+}
+.books, .books td {
+    background-color: white;
+    border: 1px solid lightgray;
+    padding: 10px;
+}
+.newbook, .newbook td  {
+    background-color: white;
+    border: 1px solid lightgray;
+    padding: 10px;
+}

@@ -19,6 +19,4 @@ public class AuthorRepositoryCustomImpl implements AuthorRepositoryCustom {
         val update = new Update().pull("books", query);
         mongoTemplate.updateMulti(new Query(), update, Author.class);
     }
-
-    ;
 }

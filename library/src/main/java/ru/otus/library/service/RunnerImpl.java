@@ -14,7 +14,7 @@ public class RunnerImpl implements Runner {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final CommentRepository commentRepository;
-    private final Input consoleInput;
+
 
     @Override
     public void startLibrary() {

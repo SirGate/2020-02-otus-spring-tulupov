@@ -1,0 +1,10 @@
+body {
+    padding: 50px;
+    background-color: beige;
+}
+
+.authors, .authors td {
+    background-color: white;
+    border: 1px solid lightgray;
+    padding: 5px;
+}

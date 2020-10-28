@@ -22,7 +22,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-
 @DataMongoTest
 @EnableConfigurationProperties
 @ComponentScan({"ru.otus.library"})
@@ -41,11 +40,10 @@ class LibraryApplicationTest {
     @Autowired
     CommentRepository commentRepository;
 
-
     @DisplayName("Should return all comments for given book")
     @Test
     void shouldReturnCommentsForBook() {
-        if (bookRepository.findAll().size() == 0) {
+        if (bookRepository.findByTitle("Solaris").get().size() == 0) {
             val author = authorRepository.
                     findBySurnameAndName("Lem", "Stanislav").get();
             val genre = genreRepository.getByDescription("Science fiction").get();
@@ -68,7 +66,7 @@ class LibraryApplicationTest {
     @DisplayName("Should return created author and created genre for created book")
     @Test
     void shouldReturnCreatedAuthorAndCreatedGenreAfterBookCreation() {
-        val author = new Author("Gianni", "Rodari");
+        val author = Author.builder().name("Gianni").surname("Rodari").build();
         val genre = new Genre("Fairytales");
         val book = Book.builder().title("Chippolino").genre(genre).authors(List.of(author)).build();
         bookRepository.save(book);
@@ -94,5 +92,4 @@ class LibraryApplicationTest {
                 () -> assertThat(expectedSize).isEqualTo(0)
         );
     }
-
 }
