@@ -44,22 +44,4 @@ public class Book {
     public void addComment(Comment comment) {
         comments.add(comment);
     }
-
-    public String printAuthors() {
-        String allAuthors = "";
-        int count = 0;
-
-        for (var str : authors) {
-            if (str != null) {
-                allAuthors += str.getName() + " " + str.getSurname();
-                count++;
-                if (count == authors.size()) {
-                    allAuthors += ".";
-                } else {
-                    allAuthors += ", ";
-                }
-            }
-        }
-        return allAuthors;
-    }
 }

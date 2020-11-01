@@ -7,50 +7,61 @@
     <link rel="stylesheet" type="text/css" href="home.css">
 </head>
 <body>
-<a href="/"><div class="home"></div></a>
+<a href="/">
+    <div class="home"></div>
+</a>
 <h1>Books:</h1>
 <div class="wrapper">
-<div>
-    <table class="books">
-        <thead>
-        <tr>
-            <th>count</th>
-            <th>Title</th>
-            <th>Authors</th>
-            <th>Genre</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book, state : ${books}">
-            <td th:text="${state.count}">count</td>
-            <td th:text="${book.title}"></td>
-            <td th:text="${book.printAuthors()}"></td>
-            <td th:text="${book.genre.getDescription()}"></td>
+    <div>
+        <table class="books">
+            <thead>
+            <tr>
+                <th>count</th>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>Genre</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book, state : ${books}">
+                <td th:text="${state.count}">count</td>
+                <td th:text="${book.title}"></td>
+                <td>
+                     <span th:each="authors, state :${book.getAuthors()}"
+                           th:if="${state.last == false}"
+                           th:text="${authors.getName()} + ' ' + ${authors.getSurname()} + ','">
+                      </span>
+                    <span th:each="authors, state :${book.getAuthors()}"
+                          th:if="${state.last == true}"
+                          th:text="${authors.getName()} + ' ' + ${authors.getSurname()} + '.'">
+                      </span>
+                </td>
+                <td th:text="${book.genre.getDescription()}"></td>
+                <td>
+                    <a th:href="@{/edit_book(id=${book.id})}" href="edit_book.html">Edit</a>
+                </td>
+                <td>
+                    <a th:href="@{/delete-book(id=${book.id})}" href="delete-book.html">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table class="newbook">
+            <thead>
+            <tr>
+                <th>Create new book</th>
+            </tr>
+            </thead>
+            <tbody>
             <td>
-                <a th:href="@{/edit_book(id=${book.id})}" href="edit_book.html">Edit</a>
+                <a th:href="@{/create}" href="create-book.html">Create</a>
             </td>
-            <td>
-                <a th:href="@{/delete-book(id=${book.id})}" href="delete-book.html">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-<div>
-    <table class="newbook">
-        <thead>
-        <tr>
-            <th>Create new book</th>
-        </tr>
-        </thead>
-        <tbody>
-        <td>
-            <a th:href="@{/create}" href="create-book.html">Create</a>
-        </td>
-        </tbody>
-    </table>
-</div>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

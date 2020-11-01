@@ -36,12 +36,15 @@
 
     <div class="row">
         <label for="authors">Authors:</label>
-        <input id="authors" type="text" readonly="readonly" th:value="*{printAuthors()}"/>
-    </div>
-
+        <tr id="authors" th:each="author, state : ${book.getAuthors()}">
+            <td th:text="${state.count} + '.'">count</td>
+            <td th:text="${author.name}"></td>
+            <td th:text="${author.surname} + '.'"></td>
+        </tr>
+      </div>
     <div class="row">
         <label for="genre-description">Genre:</label>
-        <input id="genre-description" type="text" readonly="readonly" th:value="*{getGenre().getDescription()}"/>
+            <span id="genre-description" th:text="*{getGenre().getDescription()}"></span>
     </div>
 
     <div class="row">

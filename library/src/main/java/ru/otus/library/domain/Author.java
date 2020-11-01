@@ -37,21 +37,4 @@ public class Author {
     public void deleteBook(Book book) {
         books.remove(book);
     }
-
-    public String printBooks() {
-        String allBooks = "";
-        int count = 0;
-        for (var str : books) {
-            if (str != null) {
-                allBooks += str.getTitle();
-                count++;
-                if (count == books.size()) {
-                    allBooks += ".";
-                } else {
-                    allBooks += ", ";
-                }
-            }
-        }
-        return allBooks;
-    }
 }

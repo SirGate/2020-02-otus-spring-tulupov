@@ -7,7 +7,9 @@
     <link rel="stylesheet" type="text/css" href="home.css">
 </head>
 <body>
-<a href="/"><div class="home"></div></a>
+<a href="/">
+    <div class="home"></div>
+</a>
 <h1>Authors:</h1>
 <table class="authors">
     <thead>
@@ -24,7 +26,16 @@
         <td th:text="${state.count}">count</td>
         <td th:text="${author.name}"></td>
         <td th:text="${author.surname}"></td>
-        <td th:text="${author.printBooks()}"></td>
+        <td>
+           <span th:each="authors, state :${author.getBooks()}"
+                 th:if="${state.last == false}"
+                 th:text="${authors.getTitle()} + ','">
+           </span>
+            <span th:each="authors, state :${author.getBooks()}"
+                  th:if="${state.last == true}"
+                  th:text="${authors.getTitle()} + '.'">
+            </span>
+        </td>
         <td>
             <a th:href="@{/edit_author(id=${author.id})}" href="edit_author.html">Edit</a>
         </td>
