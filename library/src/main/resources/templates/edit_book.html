@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+            background-color: beige;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="edit-form" th:object="${book}" th:action="@{/edit_book(id=*{id})}" th:method="post" action="edit_book.html">
+
+    <h1>Book info:</h1>
+
+    <div class="row">
+        <label for="title-input">Title:</label>
+        <input id="title-input" name="title" type="text" th:value="*{title}"/>
+    </div>
+
+    <div class="row">
+        <label for="authors">Authors:</label>
+        <tr id="authors" th:each="author, state : ${book.getAuthors()}">
+            <td th:text="${state.count} + '.'">count</td>
+            <td th:text="${author.name}"></td>
+            <td th:text="${author.surname} + '.'"></td>
+        </tr>
+      </div>
+    <div class="row">
+        <label for="genre-description">Genre:</label>
+            <span id="genre-description" th:text="*{getGenre().getDescription()}"></span>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+    </div>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all books</title>
+    <link rel="stylesheet" type="text/css" href="genres.css">
+    <link rel="stylesheet" type="text/css" href="home.css">
+</head>
+<body>
+<a href="/"><div class="home"></div></a>
+<h1>Genres:</h1>
+<table class="genres">
+    <thead>
+    <tr>
+        <th>count</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="genre, state : ${genres}">
+        <td th:text="${state.count}">count</td>
+        <td th:text="${genre.description}"></td>
+        <td>
+            <a th:href="@{/edit-genre(id=${genre.id})}" href="edit-genre.html">Edit</a>
+        </td>
+        <td>
+            <a th:href="@{/delete-genre(id=${genre.id})}" href="delete-genre.html">Delete</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

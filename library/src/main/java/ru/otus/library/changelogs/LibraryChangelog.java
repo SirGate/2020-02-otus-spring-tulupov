@@ -16,7 +16,10 @@ import java.util.List;
 @ChangeLog(order = "001")
 public class LibraryChangelog {
     private Author Lem;
+    private Author Belov;
+    private Author Twain;
     private Genre fiction;
+    private Genre adventures;
     private Book book;
     private Comment comment1 = new Comment();
     private Comment comment2 = new Comment();
@@ -29,14 +32,15 @@ public class LibraryChangelog {
 
     @ChangeSet(order = "001", id = "addAuthors", author = "SirGate", runAlways = true)
     public void insertAuthors(MongoTemplate template) {
-        Lem = template.save(new Author("Stanislav", "Lem"));
-        template.save(new Author("Mark", "Twain"));
+        Lem = template.save(Author.builder().name("Stanislav").surname("Lem").build());
+        Belov = template.save(Author.builder().name("Ivan").surname("Belov").build());
+        Twain = template.save(Author.builder().name("Mark").surname("Twain").build());
     }
 
     @ChangeSet(order = "002", id = "addGenres", author = "SirGate", runAlways = true)
     public void insertGenres(MongoTemplate template) {
         fiction = template.save(new Genre("Science fiction"));
-        template.save(new Genre("Adventures"));
+        adventures = template.save(new Genre("Adventures"));
     }
 
     @ChangeSet(order = "003", id = "addBookWithComments", author = "SirGate", runAlways = true)
@@ -46,9 +50,16 @@ public class LibraryChangelog {
         comment2.setText("It's a splendid book");
         template.save(comment2);
         book = Book.builder().title("Solaris").genre(fiction).
-                authors(List.of(Lem)).comments(List.of(comment1, comment2)).build();
+                authors(List.of(Lem, Belov)).comments(List.of(comment1, comment2)).build();
         template.save(book);
-        Lem.addBook(book);
+        Lem.setBooks(List.of(book));
+        Belov.setBooks(List.of(book));
         template.save(Lem);
+        template.save(Belov);
+        book = Book.builder().title("Huckleberry Finn").genre(adventures).
+                authors(List.of(Twain)).build();
+        template.save(book);
+        Twain.setBooks(List.of(book));
+          template.save(Twain);
     }
 }
