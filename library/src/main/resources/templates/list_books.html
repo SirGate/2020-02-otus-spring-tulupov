@@ -5,15 +5,17 @@
     <title>List of all books</title>
     <link rel="stylesheet" type="text/css" href="books.css">
     <link rel="stylesheet" type="text/css" href="home.css">
+    <script src="webjars/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/actions.js}"></script>
 </head>
 <body>
 <a href="/">
     <div class="home"></div>
 </a>
 <h1>Books:</h1>
-<div class="wrapper">
+<div id="wrap" class="wrapper">
     <div>
-        <table class="books">
+        <table id="bk" class="books">
             <thead>
             <tr>
                 <th>count</th>
@@ -44,17 +46,22 @@
                 <td>
                     <a th:href="@{/delete-book(id=${book.id})}" href="delete-book.html">Delete</a>
                 </td>
+                <td>
+                    <p></p>
+
+                </td>
+                <td>
+                    <button type="button" th:data-id="${book.id}" onclick="showComments(this.getAttribute('data-id'))">
+                        Comments
+                    </button>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
     <div>
         <table class="newbook">
-            <thead>
-            <tr>
-                <th>Create new book</th>
-            </tr>
-            </thead>
+            <thead></thead>
             <tbody>
             <td>
                 <a th:href="@{/create}" href="create-book.html">Create</a>
@@ -62,9 +69,17 @@
             </tbody>
         </table>
     </div>
+    <div>
+        <table id="tab" class="comments">
+            <thead>
+            <tr>
+                <th id="comment"> Comments for book:</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 </body>
 </html>
-
 
 
