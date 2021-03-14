@@ -23,6 +23,8 @@ public class LibraryChangelog {
     private Book book;
     private Comment comment1 = new Comment();
     private Comment comment2 = new Comment();
+    private Comment comment3 = new Comment();
+    private Comment comment4 = new Comment();
 
 
     @ChangeSet(order = "000", id = "dropDB", author = "SirGate", runAlways = true)
@@ -49,6 +51,10 @@ public class LibraryChangelog {
         template.save(comment1);
         comment2.setText("It's a splendid book");
         template.save(comment2);
+        comment3.setText("For me it's not an interesting book");
+        template.save(comment3);
+        comment4.setText("It's a fascinating book");
+        template.save(comment4);
         book = Book.builder().title("Solaris").genre(fiction).
                 authors(List.of(Lem, Belov)).comments(List.of(comment1, comment2)).build();
         template.save(book);
@@ -57,9 +63,9 @@ public class LibraryChangelog {
         template.save(Lem);
         template.save(Belov);
         book = Book.builder().title("Huckleberry Finn").genre(adventures).
-                authors(List.of(Twain)).build();
+                authors(List.of(Twain)).comments(List.of(comment3, comment4)).build();
         template.save(book);
         Twain.setBooks(List.of(book));
-          template.save(Twain);
+        template.save(Twain);
     }
 }
