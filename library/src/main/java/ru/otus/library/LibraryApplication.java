@@ -10,7 +10,7 @@ import ru.otus.library.service.RunnerImpl;
 
 @EnableMongoRepositories
 @SpringBootApplication
-@EnableConfigurationProperties
+//@EnableConfigurationProperties
 public class LibraryApplication {
 
     public static void main(String[] args) {
