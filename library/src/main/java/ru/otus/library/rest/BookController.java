@@ -25,6 +25,11 @@ public class BookController {
         return "index";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
+
     @GetMapping("/list_books")
     public String listPage(Model model) {
         model.addAttribute("books", bookService.getAllBooks());

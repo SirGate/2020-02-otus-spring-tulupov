@@ -9,6 +9,7 @@ import ru.otus.library.domain.Author;
 import ru.otus.library.domain.Book;
 import ru.otus.library.domain.Comment;
 import ru.otus.library.domain.Genre;
+import ru.otus.library.domain.Users;
 
 import java.util.List;
 
@@ -60,6 +61,14 @@ public class LibraryChangelog {
                 authors(List.of(Twain)).build();
         template.save(book);
         Twain.setBooks(List.of(book));
-          template.save(Twain);
+        template.save(Twain);
+    }
+
+    @ChangeSet(order = "004", id = "addUsers", author = "SirGate", runAlways = true)
+    public void insertUsers(MongoTemplate template) {
+        //user "Sergei", password = "passme"; User "Guest", password = "password"
+        template.save(Users.builder().username("Sergei").password("$2y$10$XjOlr.n3U9FWJPGwPN4NseIobvsDclArtBHgW72P0pzC3Te71pYaa").build());
+        template.save(Users.builder().username("Guest").password("$2y$10$2XinPWudCZ5SAB/EEFuoW.MDpsCmZmjUXR7BHbaQq6hvaeElgh8km").build());
+
     }
 }

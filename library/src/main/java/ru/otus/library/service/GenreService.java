@@ -1,9 +1,7 @@
 package ru.otus.library.service;
 
 import ru.otus.library.domain.Genre;
-import ru.otus.library.rest.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface GenreService {
