@@ -5,13 +5,14 @@ import org.springframework.stereotype.Service;
 import ru.otus.library.domain.Genre;
 import ru.otus.library.repository.GenreRepository;
 import ru.otus.library.rest.NotFoundException;
+import ru.otus.library.security.IsViewer;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class GenreServiceImpl implements GenreService{
+public class GenreServiceImpl implements GenreService {
     private final GenreRepository genreRepository;
 
     public Genre getGenreById(String id) {
@@ -39,6 +40,7 @@ public class GenreServiceImpl implements GenreService{
         }
     }
 
+    @IsViewer
     public Genre updateGenre(Genre entity) {
         Genre editedGenre = genreRepository.findById(entity.getId()).get();
         editedGenre.setDescription(entity.getDescription());
@@ -46,6 +48,7 @@ public class GenreServiceImpl implements GenreService{
         return editedGenre;
     }
 
+    @IsViewer
     public void deleteGenre(String id) {
         genreRepository.deleteById(id);
     }

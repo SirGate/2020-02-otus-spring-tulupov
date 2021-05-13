@@ -9,6 +9,7 @@ import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.repository.BookRepository;
 import ru.otus.library.repository.GenreRepository;
 import ru.otus.library.rest.NotFoundException;
+import ru.otus.library.security.IsViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,7 @@ public class BookServiceImpl implements BookService {
         return book;
     }
 
+    @IsViewer
     public Book updateBook(Book entity) {
         Book editedBook = bookRepository.findById(entity.getId()).get();
         editedBook.setTitle(entity.getTitle());
@@ -68,6 +70,7 @@ public class BookServiceImpl implements BookService {
         return editedBook;
     }
 
+    @IsViewer
     public void deleteBook(String id) {
         bookRepository.deleteById(id);
     }

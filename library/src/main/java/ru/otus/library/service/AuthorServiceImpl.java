@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.library.domain.Author;
 import ru.otus.library.repository.AuthorRepository;
 import ru.otus.library.rest.NotFoundException;
+import ru.otus.library.security.IsViewer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class AuthorServiceImpl implements AuthorService {
         }
     }
 
+    @IsViewer
     public Author updateAuthor(Author entity) {
         Author editedAuthor = authorRepository.findById(entity.getId()).get();
         editedAuthor.setName(entity.getName());
@@ -48,6 +50,7 @@ public class AuthorServiceImpl implements AuthorService {
         return editedAuthor;
     }
 
+    @IsViewer
     public void deleteAuthor(String id) {
         authorRepository.deleteById(id);
     }
